@@ -1,0 +1,43 @@
+<h1>{{ Product.name }}</h1>
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<form action="/Product/{{ Product.id }}/" method="post">
+{% csrf_token %}
+{% for fv in Product.featurevalue_set.all %}
+    
+     <!-- 
+    <li>Feature Value :{{ fv.value }}</li>
+    <li>FV Feature name :{{ fv.feature.name }}</li>
+    <li>FV Feature description:{{ fv.feature.description }}</li>
+     -->
+     <label for="f{{ forloop.counter }}">Value: </label>
+	 <input type="text" name="f" id="f{{ forloop.counter }}" value="{{ fv.value }}" />
+	 
+	 <label for="selected_product{{ forloop.counter }}">Feature: </label>
+	 <SELECT NAME="selected_feature{{ forloop.counter }}">
+	 	{% for f_item in feature_list %}
+	 		{%  if f_item.id == fv.feature.id %}
+	 		 	<option value="{{ f_item.id }}" selected="selected">{{ f_item.name }}</option>
+	 		{% else %}
+	 			<option value="{{ f_item.id }}" >{{ f_item.name }}</option>
+	 		{% endif %}
+	 	{% endfor %}	 	
+	 </SELECT>
+	 
+	 <label for="selected_product{{ forloop.counter }}">Product: </label>
+	 <SELECT NAME="selected_product{{ forloop.counter }}">
+	 	{% for p_item in Product_list %}
+	 		{%  if p_item.id == Product.id %}
+	 		 	<option value="{{ p_item.id }}" selected="selected">{{ p_item.name }}</option>
+	 		{% else %}
+	 			<option value="{{ p_item.id }}" >{{ p_item.name }}</option>
+	 		{% endif %}
+	 	{% endfor %}	 	
+	 </SELECT>
+	 <input type="submit" value="Alterar">
+	 <br/>
+{% endfor %}
+
+</form>
+
