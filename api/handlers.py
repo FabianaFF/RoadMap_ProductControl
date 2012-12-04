@@ -77,7 +77,7 @@ class ProducSpectHandler(BaseHandler):
         return ('ProductSpec', [ 'json', ])
     
     def read(self, request, product_spec_id=None):
-        if id:
+        if product_spec_id:
             prod_spec = ProductSpec.objects.get(id=product_spec_id)
             prod_spec.features = Feature.objects.get(product_spec_id=prod_spec.id)
             return prod_spec
