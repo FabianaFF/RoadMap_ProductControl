@@ -8,16 +8,16 @@ from aifc import Error
 class ProductHandler(BaseHandler):
     allowed_methods = ('GET','POST','PUT','DELETE')
     model = Product   
-    fields = ('name', 'price', ('features', ('value',)))
+    fields = ('id', 'name', 'price', ('features', ('value',)))
     
     
     @classmethod
     def resource_uri(cls, product):
         return ('product', [ 'json', ])
     
-    def read(self, request, name=None):
-        if name:
-            prod = Product.objects.get(name=name)
+    def read(self, request, product_id=None):
+        if product_id:
+            prod = Product.objects.get(id=product_id)
             feature_values = FeatureValue.objects.filter(product_id=prod.id)
             prod.features = feature_values
             return prod
@@ -69,18 +69,25 @@ class ProductHandler(BaseHandler):
 class ProducSpectHandler(BaseHandler):
     allowed_methods = ('GET','POST','PUT','DELETE')
     model = ProductSpec   
-    fields = ('name')
+    fields = ('id', 'name', ('features', ('name', 'description', )))
     
     
     @classmethod
     def resource_uri(cls, ProductSpec):
         return ('ProductSpec', [ 'json', ])
     
-    def read(self, request, name=None):
-        if name:
-            return ProductSpec.objects.get(name=name)
+    def read(self, request, product_spec_id=None):
+        if id:
+            prod_spec = ProductSpec.objects.get(id=product_spec_id)
+            prod_spec.features = Feature.objects.get(product_spec_id=prod_spec.id)
+            return prod_spec
         else:
-            return ProductSpec.objects.all()
+            prod_specs = ProductSpec.objects.all()
+            
+            for p in prod_specs:
+                p.features = Feature.objects.get(product_spec_id=p.id)
+                
+            return prod_specs
         
     def create(self, request):
         
@@ -116,5 +123,17 @@ class ProducSpectHandler(BaseHandler):
             
             return prod_spec
 
-
-
+class FeatureValueHandler(BaseHandler):
+    allowed_methods = ('GET',)
+    model = FeatureValue   
+    fields = ('value')
+    
+    @classmethod
+    def resource_uri(cls, FeatureValue):
+        return ('FeatureValue', [ 'json', ])
+    
+    def read(self, request, id=None):
+        if id:
+            return FeatureValue.objects.get(id=id)
+        else:
+            return FeatureValue.DoesNotExist

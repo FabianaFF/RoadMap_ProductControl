@@ -6,8 +6,8 @@ from piston.resource import Resource
 from django.contrib import admin
 admin.autodiscover()
 
-products_resource = Resource(handler = ProductHandler)
-products_spec_resource = Resource(handler = ProducSpectHandler)
+
+
 
 urlpatterns = patterns('',
     # Examples:
@@ -19,9 +19,9 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
-    #url(r'^product/', include('product.urls')),
-    url(r'^product/', products_resource),
-    url(r'^product_spec/', products_spec_resource),
-       (r'^api/', include('api.urls')),
+    url(r'^product/', include('product.urls')),
+    #url(r'^product/', products_resource),
+    #url(r'^product_spec/', products_spec_resource),
+    (r'^api/', include('api.urls')),
     #url(r'product/(?P<product_id>\d*)/$', products_resource), 
 )
