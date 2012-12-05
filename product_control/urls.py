@@ -1,7 +1,7 @@
 from django.conf.urls import patterns, include, url
 from api.handlers import ProductHandler,ProducSpectHandler
 from piston.resource import Resource
-
+from django.views.generic.simple import direct_to_template
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
 admin.autodiscover()
@@ -23,5 +23,11 @@ urlpatterns = patterns('',
     #url(r'^product/', products_resource),
     #url(r'^product_spec/', products_spec_resource),
     (r'^api/', include('api.urls')),
+    url(r'^lista/$', direct_to_template, {'template': 'product_ext/product_list.html'}),
+    url(r'^lista2/$', direct_to_template, {'template': 'product_spec_ext/product_spec_list.html'}),
+    url(r'^lista2/detail/(?P<id>\d+)/$', direct_to_template, {'template': 'product_spec_ext/product_spec_detail.html'}),    
+    url(r'^lista2/(?P<product_id>\d+)/$', direct_to_template, {'template': 'product_ext/product_list.html'}),
+    
+    #(r'^product/lista', direct_to_template, {''}),
     #url(r'product/(?P<product_id>\d*)/$', products_resource), 
 )
